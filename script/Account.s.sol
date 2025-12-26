@@ -3,8 +3,8 @@ pragma solidity ^0.8.27;
 
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
+import {Upgrades} from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import {SimpleAccount} from "../src/Account.sol";
-import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
 /**
  * @title AccountScript
@@ -36,10 +36,8 @@ contract AccountScript is Script {
         vm.startBroadcast();
 
         // Deploy SimpleAccount implementation and UUPS proxy via Upgrades library
-        address proxy = Upgrades.deployUUPSProxy(
-            "SimpleAccount.sol",
-            abi.encodeCall(SimpleAccount.initialize, (signer))
-        );
+        address proxy =
+            Upgrades.deployUUPSProxy("SimpleAccount.sol", abi.encodeCall(SimpleAccount.initialize, (signer)));
 
         vm.stopBroadcast();
 
